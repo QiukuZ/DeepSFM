@@ -1,2 +1,4 @@
 dataset/*/
 /pretrained_model/
+/result_tmp/
+*__pycache__
