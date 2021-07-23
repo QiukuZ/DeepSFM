@@ -193,7 +193,7 @@ def depth_warp(fdepth, depth, pose, intrinsics, intrinsics_inv, padding_mode='ze
 	projected_depth = cam2depth(cam_coords, pose_mat[:, :, :3], pose_mat[:, :, -1:])
 	# projected_depth = projected_depth.clamp(min=-1e1, max=1e3)
 	fdepth_expand = fdepth.unsqueeze(1)
-	fdepth_expand = torch.nn.functional.upsample(fdepth_expand, [feat_height, feat_width], mode='bilinear')
+	fdepth_expand = torch.nn.functional.interpolate(fdepth_expand, [feat_height, feat_width], mode='bilinear', align_corners=False)
 
 	warped_depth = torch.nn.functional.grid_sample(fdepth_expand, src_pixel_coords, mode="nearest",
 	                                               padding_mode=padding_mode)

@@ -3,7 +3,8 @@ import os
 import torch.utils.data as data
 import numpy as np
 from transforms3d.euler import mat2euler
-from scipy.misc import imread
+# from scipy.misc import imread
+from imageio import imread
 from path import Path
 import random
 

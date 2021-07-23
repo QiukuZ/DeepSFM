@@ -4,7 +4,7 @@ import torch.utils.data
 
 from inverse_warp import inverse_warp, depth_warp
 from models.submodule import *
-
+import math
 
 def convtext(in_planes, out_planes, kernel_size=3, stride=1, dilation=1):
     return nn.Sequential(
@@ -151,13 +151,13 @@ class PSNet(nn.Module):
             costt = costs[:, :, i, :, :]
             costss[:, :, i, :, :] = self.convs(torch.cat([refimg_fea, costt], 1)) + costt
 
-        costs = F.upsample(costs, [self.nlabel, ref.size()[2], ref.size()[3]], mode='trilinear')
+        costs = F.interpolate(costs, [self.nlabel, ref.size()[2], ref.size()[3]], mode='trilinear', align_corners=False)
         costs = torch.squeeze(costs, 1)
         pred0 = F.softmax(costs, dim=1)
         pred0 = disparityregression(self.nlabel)(pred0)
         depth0 = self.mindepth * self.nlabel / (pred0.unsqueeze(1) + 1e-16)
 
-        costss = F.upsample(costss, [self.nlabel, ref.size()[2], ref.size()[3]], mode='trilinear')
+        costss = F.interpolate(costss, [self.nlabel, ref.size()[2], ref.size()[3]], mode='trilinear', align_corners=False)
         costss = torch.squeeze(costss, 1)
 
         pred = F.softmax(costss, dim=1)

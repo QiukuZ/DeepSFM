@@ -7,7 +7,8 @@ import torch
 import torch.optim
 import torch.utils.data
 from path import Path
-from scipy.misc import imsave
+# from scipy.misc import imsave
+import cv2
 from torch.autograd import Variable
 
 import custom_transforms
@@ -19,7 +20,7 @@ from utils import tensor2array
 parser = argparse.ArgumentParser(description='DeepSFM depth subnet test script',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-parser.add_argument('data', metavar='DIR',
+parser.add_argument('--data', metavar='DIR',
                     help='path to dataset')
 parser.add_argument('--sequence-length', type=int, metavar='N', help='sequence length for training', default=2)
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
@@ -134,7 +135,7 @@ def main():
 					disp = (255 * tensor2array(torch.from_numpy(output_disp_n), max_value=args.nlabel,
 					                           colormap='bone')).astype(np.uint8)
 					disp = disp.transpose(1, 2, 0)
-					imsave(output_dir / '{:08d}_disp{}'.format(i, '.png'), disp)
+					cv2.imwrite(output_dir / '{:08d}_disp{}'.format(i, '.png'), disp)
 
 	mean_errors = errors.mean(2)
 	error_names = ['abs_rel', 'abs_diff', 'sq_rel', 'rms', 'log_rms', 'a1', 'a2', 'a3', 'L1-inv', "sc-inv", 'ra', 'rd',

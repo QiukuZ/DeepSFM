@@ -2,7 +2,9 @@ from __future__ import division
 
 import numpy as np
 import torch
-from scipy.misc import imresize
+from PIL import Image
+
+# from scipy.misc import imresize
 from scipy.ndimage.interpolation import zoom
 
 '''Set of tranform random routines that takes list of inputs as arguments,
